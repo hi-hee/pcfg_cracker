@@ -6,7 +6,7 @@
 
 This file contains the functionality to identify syllable tokens
 
-Note, some alphabet strings may be classified before this is called 
+Note, some strings may be classified before this is called 
 in the detection process of email and website.
 
 """
@@ -124,7 +124,7 @@ def detect_korean(section):
         parsing.append(section[0], 'H' + str(syllable_len))
         return parsing, section[0]
 
-    return None, None
+    return section, None
 
 
 def detect_greek():
