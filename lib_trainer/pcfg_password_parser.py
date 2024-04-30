@@ -141,6 +141,14 @@ class PCFGPasswordParser:
 
         # Identify pure alpha strings in the dataset
 
+
+        '''
+        
+        ADD Syllabol Tokenizer
+        
+        '''
+
+
         found_alpha_strings, found_mask_list = alpha_detection(
             section_list,
             self.multiword_detector
