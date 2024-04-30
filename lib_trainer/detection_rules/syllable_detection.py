@@ -50,7 +50,7 @@ def detect_korean(section):
     Returns:
         There are three return values:
 
-        parsing, found_strings, masks
+        parsing, found_strings
 
         parsing: A list of the sections to return
         E.g. input password is '123tkfkd'
@@ -77,8 +77,8 @@ def detect_korean(section):
     parsing = []
 
     ## A Onset Constraint (Onset should be lenis or fortes)
-    if working_string[0] not in LENIS or CONSTR_ONSET_ONLY:
-        return
+    if working_string[0] not in LENIS and CONSTR_ONSET_ONLY:
+        return section, None
     
     ## Extracting the position of vowels
     vowel_pos = []
@@ -90,38 +90,41 @@ def detect_korean(section):
     ksr_flag = True
     idx = 0
     syllable_len =0
+
     while idx < len(vowel_pos):
+        syllable_len+=1
+
         if idx+1 >= len(vowel_pos):
             break
         
         dist = vowel_pos[idx+1] - vowel_pos[idx] 
+        a_pos = vowel_pos[idx]
         if dist == 1:
-            if not check_d_vowel(vowel_pos[idx:idx+2]):
+            if not check_d_vowel(working_string[a_pos:a_pos+2]):
                 # alpha string is not hangeul string
                 ksr_flag = False
                 break
             idx+=1
         elif dist == 2:
-            if not vowel_pos[idx+1:idx+2] in LENIS or FORTES:
+            if not working_string[a_pos+1] in LENIS and FORTES:
                 # alpha string is not hangeul string
                 ksr_flag = False
                 break
         elif dist == 3:
-            if vowel_pos[idx+2:idx+3] in ['R', 'T']:
+            if working_string[a_pos+2:a_pos+3] in ['R', 'T']:
                 # alpha string is not hangeul string
                 ksr_flag = False
                 break
         elif dist == 4:
-            if (vowel_pos[idx+3:idx+4] in ['R', 'T']) or (not vowel_pos[idx+1:idx+3] in CONS_CLUSTER):
+            if (working_string[a_pos+3:a_pos+4] in ['R', 'T']) or (not working_string[a_pos+1:a_pos+3] in CONS_CLUSTER):
                 # alpha string is not hangeul string
                 ksr_flag = False
                 break
         idx+=1
-        syllable_len+=1
 
     ## Update the parsing info
     if ksr_flag:
-        parsing.append(section[0], 'H' + str(syllable_len))
+        parsing.append((section[0], 'H' + str(syllable_len)))
         return parsing, section[0]
 
     return section, None
@@ -159,13 +162,14 @@ def syllable_detection(section_list):
     index = 0
     while index < len(section_list):
         if 'A' in section_list[index][1]:
+
             parsing, korean_string = detect_korean(section_list[index])
 
             if korean_string is not None:
                 korean_list.append(korean_string)
             
-            del section_list[index]
-            section_list[index:index] = parsing
+                del section_list[index]
+                section_list[index:index] = parsing
 
         index +=1
 

@@ -106,7 +106,7 @@ class Test_Korean_Syllable_Check(unittest.TestCase):
     def test_constraint_of_fortes_onset_only(self):
         # CONSTR_ONSET_ONLY = ['Q', 'W', 'E'] ㅃㅉㄸ
         section_list = [('Wkwkdaus', 'A8'), ('qkQ', 'A3'), ('WkW', 'A3'), ('ekE', 'A3')] 
-        
+        #바ㅃ 짜ㅉ 다ㄸ
         found_korean_string = syllable_detection(section_list)
 
         assert found_korean_string == ['Wkwkdaus'] #짜장면
