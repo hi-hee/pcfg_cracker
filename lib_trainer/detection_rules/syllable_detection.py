@@ -77,7 +77,11 @@ def detect_korean(section):
     parsing = []
 
     ## A Onset Constraint (Onset should be lenis or fortes)
-    if working_string[0] not in LENIS and CONSTR_ONSET_ONLY:
+    if not working_string[0] in LENIS+FORTES:
+        return section, None
+    
+    ## Checking an onset of the first syllable
+    if not working_string[1] in VOWEL:
         return section, None
     
     ## Extracting the position of vowels
@@ -85,7 +89,7 @@ def detect_korean(section):
     for pos, value in enumerate(working_string):
         if value in VOWEL:
             vowel_pos.append(pos)
-    
+
     ## Checking the Korean syllable rule
     ksr_flag = True
     idx = 0
@@ -95,7 +99,20 @@ def detect_korean(section):
         syllable_len+=1
 
         if idx+1 >= len(vowel_pos):
+            # Checking a consonant of the last syllable 
+            cons_len = len(working_string)-vowel_pos[idx]-1
+
+            if cons_len == 0: # when consonant is empty
+                break
+            elif cons_len == 1: # when the length of consonant is 1
+                if not working_string[vowel_pos[idx]+1] in CONSTR_ONSET_ONLY:
+                    break
+            elif cons_len == 2: # when the length of consonant is 2
+                if working_string[vowel_pos[idx]+1:] in CONS_CLUSTER:
+                    break
+            ksr_flag = False
             break
+
         
         dist = vowel_pos[idx+1] - vowel_pos[idx] 
         a_pos = vowel_pos[idx]
@@ -106,17 +123,17 @@ def detect_korean(section):
                 break
             idx+=1
         elif dist == 2:
-            if not working_string[a_pos+1] in LENIS and FORTES:
+            if not working_string[a_pos+1] in LENIS+FORTES:
                 # alpha string is not hangeul string
                 ksr_flag = False
                 break
         elif dist == 3:
-            if working_string[a_pos+2:a_pos+3] in ['R', 'T']:
+            if working_string[a_pos+1] in CONSTR_ONSET_ONLY:
                 # alpha string is not hangeul string
                 ksr_flag = False
                 break
         elif dist == 4:
-            if (working_string[a_pos+3:a_pos+4] in ['R', 'T']) or (not working_string[a_pos+1:a_pos+3] in CONS_CLUSTER):
+            if not working_string[a_pos+1:a_pos+3] in CONS_CLUSTER:
                 # alpha string is not hangeul string
                 ksr_flag = False
                 break
@@ -178,5 +195,3 @@ def syllable_detection(section_list):
 
     ## Detecting Greek ##
     # TBC
-
-    
