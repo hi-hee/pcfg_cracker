@@ -38,16 +38,16 @@ class Test_Korean_Syllable_Check(unittest.TestCase):
     def test_korean_string(self):
         section_list = [('qkskskdndb', 'A10')] #바나나여유
 
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
         
-        assert found_korean_string == ['qkskskdndb']
+        assert found_korean_string == [('qkskskdndb', 5)]
         assert section_list == [('qkskskdndb', 'H5')]
     
 
     def test_none_korean_string(self):
         section_list = [('partha', 'A6'), ('EthanRyan', 'A'), ('woshishei', 'A')]
         
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
 
         assert found_korean_string == []
         assert section_list == [('partha', 'A6'), ('EthanRyan', 'A'), ('woshishei', 'A')]
@@ -59,9 +59,9 @@ class Test_Korean_Syllable_Check(unittest.TestCase):
                         ('anjsel', 'A5'), ('dnpgktm', 'A5'), ('dnlfP', 'A5'), #뭔디, 웨하스, 위례
                         ('rmlduq', 'A5')] #긔엽
         
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
 
-        assert found_korean_string == ['dhkdwk', 'rhoscns','snlwlq','anjsel','dnpgktm','dnlfP','rmlduq']
+        assert found_korean_string == [('dhkdwk', 2), ('rhoscns', 2),('snlwlq', 2),('anjsel', 2),('dnpgktm', 3),('dnlfP', 2),('rmlduq', 2)]
         assert section_list == [('dhkdwk', 'H2'), ('rhoscns', 'H2'), ('snlwlq', 'H2'),
                                 ('anjsel', 'H2'), ('dnpgktm', 'H3'), ('dnlfP', 'H2'), 
                                 ('rmlduq', 'H2')] 
@@ -70,18 +70,18 @@ class Test_Korean_Syllable_Check(unittest.TestCase):
     def test_1_distance(self):
         section_list = [('ehtl', 'A4')] #도시
         
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
 
-        assert found_korean_string == ['ehtl']
+        assert found_korean_string == [('ehtl', 2)]
         assert section_list == [('ehtl', 'H2')]
 
 
     def test_2_distance(self):
         section_list = [('tlsehtl', 'A7')] #신도시
         
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
 
-        assert found_korean_string == ['tlsehtl']
+        assert found_korean_string == [('tlsehtl', 3)]
         assert section_list == [('tlsehtl', 'H3')]
 
 
@@ -89,18 +89,18 @@ class Test_Korean_Syllable_Check(unittest.TestCase):
         #CONS_CLUSTER = ['rt', 'sw', 'sg', 'fr', 'fa', 'fq', 'ft', 'fx', 'fv', 'fg', 'qt']
         section_list = [('tlfgdj', 'A6')] #싫어
         
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
 
-        assert found_korean_string == ['tlfgdj']
+        assert found_korean_string == [('tlfgdj', 2)]
         assert section_list == [('tlfgdj', 'H2')]
 
 
     def test_mixed_distances(self):
         section_list = [('tlfgdjdhod', 'A10')] #싫어왱
         
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
 
-        assert found_korean_string == ['tlfgdjdhod']
+        assert found_korean_string == [('tlfgdjdhod', 3)]
         assert section_list == [('tlfgdjdhod', 'H3')]
 
 
@@ -108,8 +108,8 @@ class Test_Korean_Syllable_Check(unittest.TestCase):
         # CONSTR_ONSET_ONLY = ['Q', 'W', 'E'] ㅃㅉㄸ
         section_list = [('Wkwkdaus', 'A8'), ('qkQ', 'A3'), ('WkW', 'A3'), ('ekE', 'A3')]
         #바ㅃ 짜ㅉ 다ㄸ
-        found_korean_string = syllable_detection(section_list)
+        found_korean_string, count_korean = syllable_detection(section_list)
 
-        assert found_korean_string == ['Wkwkdaus'] #짜장면
+        assert found_korean_string == [('Wkwkdaus', 3)] #짜장면
         assert section_list == [('Wkwkdaus', 'H3'), ('qkQ', 'A3'), ('WkW', 'A3'), ('ekE', 'A3')]
     

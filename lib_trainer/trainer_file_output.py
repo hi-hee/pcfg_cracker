@@ -70,6 +70,16 @@ def create_rule_folders(base_directory):
     directory_listing.append(os.path.join(base_directory,"Alpha"))
     directory_listing.append(os.path.join(base_directory,"Capitalization"))
     directory_listing.append(os.path.join(base_directory,"Prince"))
+    
+    '''
+    2024.05.04 added by Seunghee Seo
+    Adding Korean Syllable ruls directory to directory list.
+    '''
+    
+    directory_listing.append(os.path.join(base_directory,"Hangeul"))
+    
+    ''''''
+    
     directory_listing.append(os.path.join(base_directory,"Digits"))
     directory_listing.append(os.path.join(base_directory,"Years"))
     directory_listing.append(os.path.join(base_directory,"Other"))

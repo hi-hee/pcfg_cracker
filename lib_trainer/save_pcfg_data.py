@@ -178,7 +178,7 @@ def save_pcfg_data(base_directory, pcfg_parser, encoding, save_sensitive):
 
     if not save_indexed_counters(folder, pcfg_parser.count_alpha, encoding):
         return False
-
+    
     ## Save Capitalization Masks
     #
     folder = os.path.join(base_directory, "Capitalization")
@@ -186,10 +186,22 @@ def save_pcfg_data(base_directory, pcfg_parser, encoding, save_sensitive):
     if not save_indexed_counters(folder, pcfg_parser.count_alpha_masks, encoding):
         return False
 
+    '''
+    2024.05.03 added by Seunghee Seo.
+    Save Korean(Hangeul) Syllable strings.
+
+    '''
+    ## Save Hangeul strings
+    #
+    folder = os.path.join(base_directory, "Hangeul")
+    if not save_indexed_counters(folder, pcfg_parser.count_korean, encoding):
+        return False
+    
+    ''''''
+    
     ## Save Digits
     #
     folder = os.path.join(base_directory, "Digits")
-
     if not save_indexed_counters(folder, pcfg_parser.count_digits, encoding):
         return False
 

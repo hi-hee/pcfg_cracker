@@ -15,6 +15,8 @@ in the detection process of email and website.
 # from nltk.tokenize import SyllableTokenizer
 # from nltk import word_tokenize
 
+from collections import Counter
+
 
 def check_d_vowel(vowel_str):
     ''' 
@@ -50,7 +52,7 @@ def detect_korean(section):
     Returns:
         There are three return values:
 
-        parsing, found_strings
+        parsing, found_strings, syllable_len
 
         parsing: A list of the sections to return
         E.g. input password is '123tkfkd'
@@ -58,6 +60,8 @@ def detect_korean(section):
         [('tkfkd','H')]
 
         found_strings: A list containing all the korean strings found for a section
+
+        syllable_len: The count of syllables in a korean string
 
     '''
 
@@ -75,14 +79,17 @@ def detect_korean(section):
 
     working_string = section[0]
     parsing = []
-
+    
+    if len(working_string) < 2:
+        return section, None, None
+    
     ## A Onset Constraint (Onset should be lenis or fortes)
     if not working_string[0] in LENIS+FORTES:
-        return section, None
+        return section, None, None
     
     ## Checking an onset of the first syllable
     if not working_string[1] in VOWEL:
-        return section, None
+        return section, None, None
     
     ## Extracting the position of vowels
     vowel_pos = []
@@ -142,9 +149,9 @@ def detect_korean(section):
     ## Update the parsing info
     if ksr_flag:
         parsing.append((section[0], 'H' + str(syllable_len)))
-        return parsing, section[0]
+        return parsing, section[0], syllable_len
 
-    return section, None
+    return section, None, None
 
 
 def detect_greek():
@@ -163,9 +170,14 @@ def syllable_detection(section_list):
     For example tkfkd123% will extract 'tkfkd'
 
     Returns:
-        Returns one lists, korean_list
+        Returns two obejct
+         : korean_list, count_korean
 
-        korean_list: A list of korean strings that were detected
+        korean_list: A list of the tuples having korean string and length that were detected.
+        
+        For example, [('tkfkd', 2)]
+
+        count_korean: (Dictionary & Counter) Dictionary the korean string is length indexed the individual counts are broken up by length of input
 
     """
     
@@ -173,24 +185,24 @@ def syllable_detection(section_list):
     #
     # Walk through each section and find korean(hangeul) string 
     #
-
     korean_list = []
 
     index = 0
     while index < len(section_list):
-        if 'A' in section_list[index][1]:
+        if section_list[index][1] is not None:
+            if 'A' in section_list[index][1]:
+                parsing, korean_string, syllable_len = detect_korean(section_list[index])
+                
+                if korean_string is not None:
+                    korean_list.append((korean_string, syllable_len))
 
-            parsing, korean_string = detect_korean(section_list[index])
-
-            if korean_string is not None:
-                korean_list.append(korean_string)
-            
-                del section_list[index]
-                section_list[index:index] = parsing
-
+                    del section_list[index]
+                    section_list[index:index] = parsing
+                    
         index +=1
-
+        
     return korean_list
+    # (found string, length) set
 
 
     ## Detecting Greek ##

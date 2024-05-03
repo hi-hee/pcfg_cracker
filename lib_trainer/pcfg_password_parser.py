@@ -20,6 +20,10 @@ from .detection_rules.website_detection import website_detection
 from .detection_rules.year_detection import year_detection
 from .detection_rules.context_sensitive_detection import context_sensitive_detection
 from .detection_rules.alpha_detection import alpha_detection
+
+''' Syllable Detection, 2024.05.01 Seunghee added '''
+from .detection_rules.syllable_detection import syllable_detection
+
 from .detection_rules.digit_detection import digit_detection
 from .detection_rules.other_detection import other_detection
 from .base_structure import base_structure_creation
@@ -77,6 +81,11 @@ class PCFGPasswordParser:
         self.count_context_sensitive = Counter()
         self.count_alpha = {}
         self.count_alpha_masks = {}
+        
+        ''' Syllable Detection, 2024.05.01 Seunghee added '''
+        self.count_korean = {}
+        ''' '''
+
         self.count_digits = {}
         self.count_other = {}
         self.count_base_structures = Counter()
@@ -140,15 +149,6 @@ class PCFGPasswordParser:
             self.count_context_sensitive[cs_string] += 1
 
         # Identify pure alpha strings in the dataset
-
-
-        '''
-        
-        ADD Syllabol Tokenizer
-        
-        '''
-
-
         found_alpha_strings, found_mask_list = alpha_detection(
             section_list,
             self.multiword_detector
@@ -157,14 +157,36 @@ class PCFGPasswordParser:
         self._update_counter_len_indexed(self.count_alpha, found_alpha_strings)
         self._update_counter_len_indexed(self.count_alpha_masks, found_mask_list)
 
-        # Identify pure digit strings in the dataset
 
+        '''
+        
+        Syllabol Detection
+        
+        - 2024.05.01 Seunghee added
+    
+        '''
+        found_korean_strings = syllable_detection(section_list)
+        
+
+
+        # Count indexed length
+        for ko_str_t in found_korean_strings:
+            if not ko_str_t[1] in self.count_korean:
+                self.count_korean[ko_str_t[1]] = Counter()
+
+            self.count_korean[ko_str_t[1]][ko_str_t[0]] +=1
+
+        # update 식으로 변경 필요
+        #password 1개만..
+
+        ''' '''
+
+        # Identify pure digit strings in the dataset
         found_digit_strings = digit_detection(section_list)
 
         self._update_counter_len_indexed(self.count_digits, found_digit_strings)
 
         # Categorize everything else as other
-
         found_other_strings = other_detection(section_list)
 
         self._update_counter_len_indexed(self.count_other, found_other_strings)
@@ -187,7 +209,7 @@ class PCFGPasswordParser:
 
     def _update_counter_len_indexed(self, input_counter, input_list):
         """
-        Updates a Python Counter object when the item is lenght indexed
+        Updates a Python Counter object when the item is length indexed
 
         For example, if the individual counts are broken up by length of input
         Aka A1 = 'a', A3 = 'cat', A5 = 'chair'

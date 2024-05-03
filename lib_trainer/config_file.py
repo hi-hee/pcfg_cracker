@@ -142,6 +142,44 @@ def add_alpha(config, filenames):
     config.set(section, "filenames", json.dumps(filenames))
 
 
+'''
+24.05.03 added by Seunghee Seo.
+
+Hangeul(Korean) replacement for base structure
+
+'''
+
+def add_hangeul(config, filenames):
+    """
+        Creates the configuration for the Hangeul(Korean) Replacements
+
+        Variables:
+
+            config: the config file being created
+
+            filenames: A list of filenames associated with this replacement
+    """
+    section = "BASE_H"
+    config.add_section(section)
+
+    config.set(section, "name", "H")
+    config.set(section, "function", "Copy")
+    config.set(section, "directory", "Hangeul")
+    config.set(
+        section,
+        "comments",
+        "(H)angeul(Korean) replacement for base structure."
+        )
+    config.set(section, "file_type", "Length")
+    config.set(section, "inject_type", "Copy")
+    config.set(section, "is_terminal", str(True))
+    config.set(section, "filenames", json.dumps(filenames))
+    
+    
+''''''
+
+
+
 def add_digits(config, filenames):
     """
     Creates the configuration for the Digit Replacements
@@ -370,7 +408,20 @@ def create_config_file(program_info, file_input, pcfg_parser):
     add_start(config)
 
     add_alpha(config,create_filename_list(pcfg_parser.count_alpha))
+    
+    
+    '''
+    24.05.03 added by Seunghee Seo.
 
+    Hangeul(Korean) replacement for base structure
+
+    '''
+    
+    add_hangeul(config, create_filename_list(pcfg_parser.count_korean))
+    
+    ''''''
+    
+    
     add_digits(config,create_filename_list(pcfg_parser.count_digits))
 
     add_other(config,create_filename_list(pcfg_parser.count_other))
