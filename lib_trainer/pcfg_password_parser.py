@@ -158,17 +158,15 @@ class PCFGPasswordParser:
         self._update_counter_len_indexed(self.count_alpha_masks, found_mask_list)
 
 
-        '''
+        ''' ''''''
         
         Syllabol Detection
         
         - 2024.05.01 Seunghee added
     
-        '''
+        ''' ''''''
         found_korean_strings = syllable_detection(section_list)
         
-
-
         # Count indexed length
         for ko_str_t in found_korean_strings:
             if not ko_str_t[1] in self.count_korean:
@@ -176,10 +174,7 @@ class PCFGPasswordParser:
 
             self.count_korean[ko_str_t[1]][ko_str_t[0]] +=1
 
-        # update 식으로 변경 필요
-        #password 1개만..
-
-        ''' '''
+        '''''' ''''''
 
         # Identify pure digit strings in the dataset
         found_digit_strings = digit_detection(section_list)

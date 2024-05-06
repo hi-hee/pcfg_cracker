@@ -84,6 +84,15 @@ def add_start(config):
     """
     replacements = [
         {"Config_id": "BASE_A", "Transition_id": "A"}, # Alpha
+        
+        ###
+        # 2024.05.04 Added by Seunghee Seo.
+        # Korean Syllable Pattern added
+        
+        {"Config_id": "BASE_H", "Transition_id": "H"}, # Hangeul (Korean)
+
+        ###
+        
         {"Config_id": "BASE_D", "Transition_id": "D"}, # Digits
         {"Config_id": "BASE_O", "Transition_id": "O"}, # Other
         {"Config_id": "BASE_K", "Transition_id": "K"}, # Keyboard combos

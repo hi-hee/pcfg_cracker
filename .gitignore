@@ -1,3 +1,8 @@
+
+# Passwords dataset
+Dictionary/*
+
+
 # Standard "temp" file types that should not be committed
 *.i
 *.o

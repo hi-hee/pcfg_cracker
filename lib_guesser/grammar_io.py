@@ -304,6 +304,20 @@ def _load_terminals(ruleset_info, grammar, base_directory, config, skip_case):
                     }
             grammar[name] = [item]
 
+    '''
+    2024.05.04 Added by Seunghee Seo.
+    Korean Syllable Grammar is added
+    
+    '''
+    # Load the Hangeul terminals
+    if not _load_from_multiple_files(grammar, config['BASE_H'], base_directory, encoding):
+        print("Error loading Hangeul terminals")
+        return False
+    
+    ''''''
+
+
+
     # Load the digit terminals
     if not _load_from_multiple_files(grammar, config['BASE_D'], base_directory, encoding):
         print("Error loading digit terminals")
