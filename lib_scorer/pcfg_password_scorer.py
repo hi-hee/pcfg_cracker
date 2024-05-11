@@ -162,7 +162,6 @@ class PCFGPasswordScorer:
             omen_score: The OMEN level at which the input value would be generated
             at. If there is no valid OMEN parsing, it will be set to '-1'
         """
-
         # Parse the OMEN score
         omen_score = self.omen.parse(password)
 

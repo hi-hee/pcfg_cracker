@@ -392,13 +392,12 @@ def _load_config(ruleset_info, base_directory, config):
         ## Check the version
         #
         ruleset_info['rule_version'] = config.get('TRAINING_PROGRAM_DETAILS','version')
-
         # Only checking to make sure the Major version is higher, as I haven'tart
         # made any changes yet that will invalidate using a ruleset from a minor
         # release
         major_guesser = ruleset_info['version'].split('.')[0]
         major_rule = ruleset_info['rule_version'].split('.')[0]
-
+        
         if major_guesser > major_rule:
             print("The ruleset you are attempting to run is not compatible with this version of the pfcg_guesser",file=sys.stderr)
             print("PCFG_Guesser Version: " + str(ruleset_info['version']),file=sys.stderr)

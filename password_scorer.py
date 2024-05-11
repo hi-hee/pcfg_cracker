@@ -236,9 +236,12 @@ def main():
     # Re-using the TrainerFileInput from the trainer
     file_input = TrainerFileInput(
                     program_info['input_file'],
-                    pw_parser.encoding,
-                    program_info['prefixcount'])
-
+                    pw_parser.encoding)
+    
+    ''' 24.05.10 Seunghee revised'''
+                    #program_info['prefixcount'])
+    ''' '''
+    
     # Open file for output
     writer = FileOutput(program_info['output_file'], pw_parser.encoding)
 
@@ -249,16 +252,17 @@ def main():
     false_negative = 0
     try:
         input_value = file_input.read_password()
-        while input_value:
+        
+        for i_va in input_value:
 
-            result = pw_parser.parse(input_value)
-
+            result = pw_parser.parse(i_va)
+            
             writer.write(result)
-
+            
             if result[1] == 'o':
                 false_negative += 1
 
-            input_value = file_input.read_password()
+            #input_value = file_input.read_password()
 
     except Exception as msg:
         traceback.print_exc(file=sys.stdout)

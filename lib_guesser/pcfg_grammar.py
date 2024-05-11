@@ -634,7 +634,6 @@ class PcfgGrammar:
         # Initialize the final probabilty as that of the base_probability
         # This will be updated later with all of the individual transistion probs
         prob = base_prob
-
         for item in pt:
             pt_type = item[0]
             index = item[1]
@@ -993,6 +992,7 @@ class PcfgGrammar:
 
         """
 
+    
         # Initialize the pt_item
         pt_item = {
             'base_prob': 1.0,
@@ -1001,6 +1001,7 @@ class PcfgGrammar:
 
         # First find the base structure
         prob_target = random.random()
+        
         cur_prob = 0
         for item in self.base:
             cur_prob += item['prob']
@@ -1017,14 +1018,17 @@ class PcfgGrammar:
             prob_target = random.random()
             cur_prob = 0
             pt_type = item[0]
-            max_index = len(self.grammar[pt_type])
             
+            max_index = len(self.grammar[pt_type])
+
+            # Selecting index
             for index in range (0, max_index):
                 cur_prob += self.grammar[pt_type][index]['prob'] * len(self.grammar[pt_type][index]['values'])
+                
                 if cur_prob >= prob_target:
                     pt_item['pt'][pointer] = (item[0], index)
                     break
-        
+            
         # Calculate the probability
         pt_item['prob'] = self._find_prob(pt_item['pt'], pt_item['base_prob'])
 
